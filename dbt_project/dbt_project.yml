@@ -26,9 +26,14 @@ models:
     # Config indicated by + and applies to all files under models/example/
     Lakehouse:
       +materialized: table
+      +schema: Lakehouse
     Memberships:
       +materialized: table
+      +schema: Memberships
     MasterData:
       +materialized: table
+      +schema: MasterData
     Stages:
       +materialized: ephemeral
+      +schema: Stages
+
