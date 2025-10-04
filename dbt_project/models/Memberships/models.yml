@@ -63,6 +63,17 @@ models:
         description: "Record last update timestamp"
         tests:
           - not_null
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - AccountNumberFull
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - DimMembershipAccountId
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - ClubNumber
+            - AccountNumber
 
   - name: DimMembershipCards
     description: "Dimension table for membership cards"
@@ -142,6 +153,18 @@ models:
         description: "Record last update timestamp"
         tests:
           - not_null
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - MembershipNumber
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - DimMembershipCardId
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - ClubNumber
+            - AccountNumber
+            - CardNumber
 
   - name: FactMembershipTransactions
     description: "Fact table for membership transactions"
@@ -239,3 +262,11 @@ models:
         description: "Record last update timestamp"
         tests:
           - not_null
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - FactMembershipTransactionId
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - OrderNumber

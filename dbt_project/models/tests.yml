@@ -1,61 +1,8 @@
 version: 2
 
-# Tests for MasterData models
-models:
-  - name: DimClubs
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - ClubNumber
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - DimClubId
+# Tests for MasterData models - moved to individual model files
 
-  - name: DimDates
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - Date
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - DimDateId
-
-# Tests for Memberships models
-  - name: DimMembershipAccounts
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - AccountNumberFull
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - DimMembershipAccountId
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - ClubNumber
-            - AccountNumber
-
-  - name: DimMembershipCards
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - MembershipNumber
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - DimMembershipCardId
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - ClubNumber
-            - AccountNumber
-            - CardNumber
-
-  - name: FactMembershipTransactions
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - FactMembershipTransactionId
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - OrderNumber
+# Tests for Memberships models - moved to individual model files
 
 # Relationship tests
 tests:

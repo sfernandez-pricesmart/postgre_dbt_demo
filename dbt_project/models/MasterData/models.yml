@@ -41,6 +41,13 @@ models:
         description: "Record last update timestamp"
         tests:
           - not_null
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - ClubNumber
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - DimClubId
 
   - name: DimDates
     description: "Dimension table for dates with calendar attributes"
@@ -98,3 +105,11 @@ models:
         description: "Record last update timestamp"
         tests:
           - not_null
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - Date
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - DimDateId
