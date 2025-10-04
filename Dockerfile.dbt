@@ -14,8 +14,8 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install dbt
-RUN pip install dbt-postgres
+# Install dbt with specific versions to avoid protobuf compatibility issues
+RUN pip install dbt-core==1.8.0 dbt-postgres==1.8.0
 
 # Create dbt project directory
 RUN mkdir -p /app/dbt_project
