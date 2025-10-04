@@ -1,0 +1,68 @@
+version: 2
+
+models:
+  - name: DimClubs
+    description: "Dimension table for clubs information"
+    columns:
+      - name: ClubNumber
+        description: "Unique identifier for the club"
+        tests:
+          - not_null
+          - unique
+      - name: ClubName
+        description: "Name of the club"
+        tests:
+          - not_null
+      - name: Country
+        description: "Country where the club is located"
+        tests:
+          - not_null
+      - name: Zone
+        description: "Geographic zone of the club"
+      - name: Status
+        description: "Status of the club (Active/Inactive)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['A', 'I']
+
+  - name: DimDates
+    description: "Dimension table for dates with calendar attributes"
+    columns:
+      - name: Date
+        description: "The date value"
+        tests:
+          - not_null
+          - unique
+      - name: Year
+        description: "Year component of the date"
+        tests:
+          - not_null
+      - name: Month
+        description: "Month component of the date (1-12)"
+        tests:
+          - not_null
+      - name: Day
+        description: "Day component of the date (1-31)"
+        tests:
+          - not_null
+      - name: Quarter
+        description: "Quarter of the year (1-4)"
+        tests:
+          - not_null
+      - name: Week
+        description: "Week number of the year"
+        tests:
+          - not_null
+      - name: DayOfWeek
+        description: "Day of the week (1=Monday, 7=Sunday)"
+        tests:
+          - not_null
+      - name: IsWeekend
+        description: "Boolean indicating if the date is a weekend"
+        tests:
+          - not_null
+      - name: IsHoliday
+        description: "Boolean indicating if the date is a holiday"
+        tests:
+          - not_null

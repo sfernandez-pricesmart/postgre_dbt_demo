@@ -1,0 +1,164 @@
+version: 2
+
+models:
+  - name: DimMembershipAccounts
+    description: "Dimension table for membership accounts"
+    columns:
+      - name: AccountNumberFull
+        description: "Full account number (Cost Center + Account Number)"
+        tests:
+          - not_null
+          - unique
+      - name: ClubNumber
+        description: "Club number where the account belongs"
+        tests:
+          - not_null
+      - name: HomeClubNumber
+        description: "Home club number for the account"
+      - name: AccountType
+        description: "Type of account (DI=Individual, BS=Business)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['DI', 'BS']
+      - name: AccountNumber
+        description: "Account number within the club"
+        tests:
+          - not_null
+      - name: Complimentary
+        description: "Whether the account is complimentary"
+      - name: DateAccountOpened
+        description: "Date when the account was opened"
+      - name: EffectiveDate
+        description: "Effective date of the account"
+      - name: ExpirationDate
+        description: "Expiration date of the account"
+      - name: CancelDate
+        description: "Date when the account was cancelled"
+      - name: BusinessName
+        description: "Business name for business accounts"
+      - name: BSBusinessType
+        description: "Business type for business accounts"
+      - name: PlatinumAccount
+        description: "Whether the account is platinum"
+        tests:
+          - not_null
+      - name: NumberOfEmployees
+        description: "Number of employees for business accounts"
+      - name: BusinessLicenseNumber
+        description: "Business license number"
+
+  - name: DimMembershipCards
+    description: "Dimension table for membership cards"
+    columns:
+      - name: MembershipNumber
+        description: "Full membership number (Cost Center + Account + Card)"
+        tests:
+          - not_null
+          - unique
+      - name: AccountNumberFull
+        description: "Full account number this card belongs to"
+        tests:
+          - not_null
+      - name: ClubNumber
+        description: "Club number where the card was issued"
+        tests:
+          - not_null
+      - name: CardNumber
+        description: "Card number within the account"
+        tests:
+          - not_null
+      - name: BlockStatus
+        description: "Status of the card (blocked/active)"
+      - name: CancelDate
+        description: "Date when the card was cancelled"
+      - name: HasCellPhone
+        description: "Whether the member has provided cell phone"
+        tests:
+          - not_null
+      - name: HasEmail
+        description: "Whether the member has provided email"
+        tests:
+          - not_null
+      - name: MemEvent
+        description: "Membership event code"
+      - name: Zone
+        description: "Geographic zone"
+      - name: AwarenessCode
+        description: "Awareness code for marketing"
+      - name: WayOfNotification
+        description: "Preferred way of notification"
+      - name: DateOfBirth
+        description: "Member's date of birth"
+      - name: IssuedDate
+        description: "Date when the card was issued"
+      - name: Gender
+        description: "Member's gender"
+      - name: CardType
+        description: "Type of membership card"
+      - name: Country
+        description: "Member's country"
+      - name: DiamondBusinessType
+        description: "Diamond business type"
+      - name: MemberStatus
+        description: "Status of the member"
+      - name: PrimaryCard
+        description: "Whether this is the primary card"
+        tests:
+          - not_null
+      - name: Dual
+        description: "Dual membership indicator"
+      - name: AutoCharge
+        description: "Auto charge indicator"
+
+  - name: FactMembershipTransactions
+    description: "Fact table for membership transactions"
+    columns:
+      - name: ClubNumber
+        description: "Club number where transaction occurred"
+        tests:
+          - not_null
+      - name: AccountNumber
+        description: "Account number for the transaction"
+        tests:
+          - not_null
+      - name: OrderNumber
+        description: "Order number for the transaction"
+        tests:
+          - not_null
+      - name: TransactionDate
+        description: "Date of the transaction"
+        tests:
+          - not_null
+      - name: AccountType
+        description: "Type of account (DI/BS)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['DI', 'BS']
+      - name: TransactionType
+        description: "Type of transaction"
+        tests:
+          - not_null
+      - name: ExpiredDate
+        description: "Expiration date of the transaction"
+      - name: EffectiveDate
+        description: "Effective date of the transaction"
+        tests:
+          - not_null
+      - name: HomeCostCenter
+        description: "Home cost center for the transaction"
+      - name: PlatinumTransaction
+        description: "Whether this is a platinum transaction"
+      - name: SalesOrderNumber
+        description: "Sales order number"
+      - name: InvoiceNumber
+        description: "Invoice number"
+      - name: TotalCost
+        description: "Total cost of the transaction"
+        tests:
+          - not_null
+      - name: TotalUsdCostNet
+        description: "Total USD cost net of the transaction"
+        tests:
+          - not_null

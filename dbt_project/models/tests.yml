@@ -1,0 +1,129 @@
+version: 2
+
+# Tests for MasterData models
+models:
+  - name: DimClubs
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - ClubNumber
+            - ClubName
+
+  - name: DimDates
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - Date
+
+# Tests for Memberships models
+  - name: DimMembershipAccounts
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - AccountNumberFull
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - ClubNumber
+            - AccountNumber
+
+  - name: DimMembershipCards
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - MembershipNumber
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - ClubNumber
+            - AccountNumber
+            - CardNumber
+
+  - name: FactMembershipTransactions
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - ClubNumber
+            - AccountNumber
+            - OrderNumber
+            - TransactionDate
+
+# Relationship tests
+tests:
+  # Test foreign key relationships
+  - name: test_fact_transactions_club_fk
+    description: "Test that all transactions have valid club references"
+    model: FactMembershipTransactions
+    test: relationships_where
+    config:
+      to: ref('DimClubs')
+      from_field: ClubNumber
+      to_field: ClubNumber
+      where: "ClubNumber is not null"
+
+  - name: test_fact_transactions_account_fk
+    description: "Test that all transactions have valid account references"
+    model: FactMembershipTransactions
+    test: relationships_where
+    config:
+      to: ref('DimMembershipAccounts')
+      from_field: AccountNumberFull
+      to_field: AccountNumberFull
+      where: "AccountNumberFull is not null"
+
+  - name: test_cards_account_fk
+    description: "Test that all cards have valid account references"
+    model: DimMembershipCards
+    test: relationships_where
+    config:
+      to: ref('DimMembershipAccounts')
+      from_field: AccountNumberFull
+      to_field: AccountNumberFull
+      where: "AccountNumberFull is not null"
+
+  - name: test_cards_club_fk
+    description: "Test that all cards have valid club references"
+    model: DimMembershipCards
+    test: relationships_where
+    config:
+      to: ref('DimClubs')
+      from_field: ClubNumber
+      to_field: ClubNumber
+      where: "ClubNumber is not null"
+
+  - name: test_accounts_club_fk
+    description: "Test that all accounts have valid club references"
+    model: DimMembershipAccounts
+    test: relationships_where
+    config:
+      to: ref('DimClubs')
+      from_field: ClubNumber
+      to_field: ClubNumber
+      where: "ClubNumber is not null"
+
+# Data quality tests
+  - name: test_transaction_amounts_positive
+    description: "Test that transaction amounts are positive"
+    model: FactMembershipTransactions
+    test: dbt_utils.expression_is_true
+    config:
+      expression: "TotalCost > 0 and TotalUsdCostNet > 0"
+
+  - name: test_account_dates_logical
+    description: "Test that account dates are logical (opened before expired)"
+    model: DimMembershipAccounts
+    test: dbt_utils.expression_is_true
+    config:
+      expression: "DateAccountOpened <= ExpirationDate or ExpirationDate is null"
+
+  - name: test_card_dates_logical
+    description: "Test that card dates are logical (issued before cancelled)"
+    model: DimMembershipCards
+    test: dbt_utils.expression_is_true
+    config:
+      expression: "IssuedDate <= CancelDate or CancelDate is null"
+
+  - name: test_transaction_dates_logical
+    description: "Test that transaction dates are logical (effective before expired)"
+    model: FactMembershipTransactions
+    test: dbt_utils.expression_is_true
+    config:
+      expression: "EffectiveDate <= ExpiredDate or ExpiredDate is null"
