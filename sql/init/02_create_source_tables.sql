@@ -23,7 +23,9 @@ CREATE TABLE IF NOT EXISTS "LakehouseAs400"."PROD_membership_cards" (
     "Member_Status" VARCHAR(2),
     "Primary_Card" VARCHAR(1),
     "Dual" VARCHAR(3),
-    "Auto_Charge" VARCHAR(3)
+    "Auto_Charge" VARCHAR(3),
+    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Membership Accounts Source Table
@@ -41,7 +43,9 @@ CREATE TABLE IF NOT EXISTS "LakehouseAs400"."PROD_membership_accounts" (
     "BS_Business_Type" VARCHAR(3),
     "Platinum_Account" VARCHAR(1),
     "Number_of_Employees" NUMERIC(15,0),
-    "Business_License_Number" TEXT
+    "Business_License_Number" TEXT,
+    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Membership Transactions Source Table
@@ -59,7 +63,9 @@ CREATE TABLE IF NOT EXISTS "LakehouseAs400"."PROD_membership_transactions_header
     "Sales_Order_Number" VARCHAR(8),
     "Invoice_Number" VARCHAR(8),
     "Total_Cost" NUMERIC(15,2),
-    "Total_Usd_Cost_Net" NUMERIC(15,2)
+    "Total_Usd_Cost_Net" NUMERIC(15,2),
+    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Clubs Source Table
@@ -68,7 +74,9 @@ CREATE TABLE IF NOT EXISTS "LakehouseAs400"."PROD_clubs" (
     "Club_Name" VARCHAR(50),
     "Country" VARCHAR(3),
     "Zone" VARCHAR(3),
-    "Status" VARCHAR(1)
+    "Status" VARCHAR(1),
+    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Dates Source Table (for date dimension)
@@ -81,5 +89,7 @@ CREATE TABLE IF NOT EXISTS "LakehouseAs400"."PROD_dates" (
     "Week" INTEGER,
     "Day_of_Week" INTEGER,
     "Is_Weekend" BOOLEAN,
-    "Is_Holiday" BOOLEAN
+    "Is_Holiday" BOOLEAN,
+    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

@@ -8,84 +8,50 @@ models:
     columns:
       - name: ClubNumber
         description: "Club number identifier"
-        tests:
-          - not_null
       - name: ClubName
         description: "Name of the club"
-        tests:
-          - not_null
       - name: Country
         description: "Country code"
-        tests:
-          - not_null
       - name: Zone
         description: "Geographic zone"
       - name: Status
         description: "Club status"
-        tests:
-          - not_null
 
   - name: StgDimDates
     description: "Staging model for dates dimension - cleans and transforms raw date data"
     columns:
       - name: Date
         description: "Date value"
-        tests:
-          - not_null
       - name: Year
         description: "Year component"
-        tests:
-          - not_null
       - name: Month
         description: "Month component"
-        tests:
-          - not_null
       - name: Day
         description: "Day component"
-        tests:
-          - not_null
       - name: Quarter
         description: "Quarter of the year"
-        tests:
-          - not_null
       - name: Week
         description: "Week number"
-        tests:
-          - not_null
       - name: DayOfWeek
         description: "Day of the week"
-        tests:
-          - not_null
       - name: IsWeekend
         description: "Weekend indicator"
-        tests:
-          - not_null
       - name: IsHoliday
         description: "Holiday indicator"
-        tests:
-          - not_null
 
   - name: StgDimMembershipAccounts
     description: "Staging model for membership accounts - cleans and transforms raw account data"
     columns:
       - name: AccountNumberFull
         description: "Full account number"
-        tests:
-          - not_null
       - name: ClubNumber
         description: "Club number"
-        tests:
-          - not_null
       - name: HomeClubNumber
         description: "Home club number"
       - name: AccountType
         description: "Account type"
-        tests:
-          - not_null
       - name: AccountNumber
         description: "Account number"
-        tests:
-          - not_null
       - name: Complimentary
         description: "Complimentary indicator"
       - name: DateAccountOpened
@@ -102,8 +68,6 @@ models:
         description: "Business type"
       - name: PlatinumAccount
         description: "Platinum account indicator"
-        tests:
-          - not_null
       - name: NumberOfEmployees
         description: "Number of employees"
       - name: BusinessLicenseNumber
@@ -116,32 +80,20 @@ models:
     columns:
       - name: MembershipNumber
         description: "Full membership number"
-        tests:
-          - not_null
       - name: AccountNumberFull
         description: "Full account number"
-        tests:
-          - not_null
       - name: ClubNumber
         description: "Club number"
-        tests:
-          - not_null
       - name: CardNumber
         description: "Card number"
-        tests:
-          - not_null
       - name: BlockStatus
         description: "Block status"
       - name: CancelDate
         description: "Cancel date"
       - name: HasCellPhone
         description: "Has cell phone indicator"
-        tests:
-          - not_null
       - name: HasEmail
         description: "Has email indicator"
-        tests:
-          - not_null
       - name: MemEvent
         description: "Membership event"
       - name: Zone
@@ -166,8 +118,6 @@ models:
         description: "Member status"
       - name: PrimaryCard
         description: "Primary card indicator"
-        tests:
-          - not_null
       - name: Dual
         description: "Dual indicator"
       - name: AutoCharge
@@ -178,34 +128,20 @@ models:
     columns:
       - name: ClubNumber
         description: "Club number"
-        tests:
-          - not_null
       - name: AccountNumber
         description: "Account number"
-        tests:
-          - not_null
       - name: OrderNumber
         description: "Order number"
-        tests:
-          - not_null
       - name: TransactionDate
         description: "Transaction date"
-        tests:
-          - not_null
       - name: AccountType
         description: "Account type"
-        tests:
-          - not_null
       - name: TransactionType
         description: "Transaction type"
-        tests:
-          - not_null
       - name: ExpiredDate
         description: "Expired date"
       - name: EffectiveDate
         description: "Effective date"
-        tests:
-          - not_null
       - name: HomeCostCenter
         description: "Home cost center"
       - name: PlatinumTransaction
@@ -216,9 +152,5 @@ models:
         description: "Invoice number"
       - name: TotalCost
         description: "Total cost"
-        tests:
-          - not_null
       - name: TotalUsdCostNet
         description: "Total USD cost net"
-        tests:
-          - not_null

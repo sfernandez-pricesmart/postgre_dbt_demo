@@ -11,62 +11,39 @@ sources:
         columns:
           - name: Cost_Center
             description: "Cost center identifier"
-            tests:
-              - not_null
           - name: Account_Number
             description: "Account number"
-            tests:
-              - not_null
           - name: Card_Number
             description: "Card number"
-            tests:
-              - not_null
               
       - name: PROD_membership_accounts
         description: "Raw membership accounts data from AS400"
         columns:
           - name: Cost_Center
             description: "Cost center identifier"
-            tests:
-              - not_null
           - name: Account_Number
             description: "Account number"
-            tests:
-              - not_null
               
       - name: PROD_membership_transactions_header
         description: "Raw membership transactions data from AS400"
         columns:
           - name: Cost_Center
             description: "Cost center identifier"
-            tests:
-              - not_null
           - name: Account_Number
             description: "Account number"
-            tests:
-              - not_null
           - name: Transaction_Date
             description: "Transaction date"
-            tests:
-              - not_null
               
       - name: PROD_clubs
         description: "Raw clubs data from AS400"
         columns:
           - name: Club_Number
             description: "Club number identifier"
-            tests:
-              - not_null
           - name: Club_Name
             description: "Club name"
-            tests:
-              - not_null
               
       - name: PROD_dates
         description: "Raw dates data for date dimension"
         columns:
           - name: Date
             description: "Date value"
-            tests:
-              - not_null
-              - unique

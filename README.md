@@ -74,6 +74,35 @@ docker exec dbt_workspace bash -c "cd /app/dbt_project && dbt test"
 docker exec dbt_workspace bash -c "cd /app/dbt_project && dbt docs serve"
 ```
 
+### Running SQL Files
+
+#### Database Setup Scripts
+```bash
+# Create source tables with audit columns
+docker exec postgres_dbt psql -U postgres -d elysium_dev -f /docker-entrypoint-initdb.d/02_create_source_tables.sql
+
+# Populate source tables with sample data
+docker exec postgres_dbt psql -U postgres -d elysium_dev -f /docker-entrypoint-initdb.d/data/01_populate_source_data.sql
+
+# Create dimensional tables with constraints
+docker exec postgres_dbt psql -U postgres -d elysium_dev -f /docker-entrypoint-initdb.d/constraints/create_tables_with_constraints.sql
+```
+
+#### Simulation Scenarios
+```bash
+# Run new transactions scenario
+docker exec postgres_dbt psql -U postgres -d elysium_dev -f /docker-entrypoint-initdb.d/scenarios/01_new_transactions_scenario.sql
+```
+
+#### Direct SQL Execution
+```bash
+# Execute SQL commands directly
+docker exec postgres_dbt psql -U postgres -d elysium_dev -c "SELECT COUNT(*) FROM \"LakehouseAs400\".\"PROD_clubs\";"
+
+# Connect to PostgreSQL interactively
+docker exec -it postgres_dbt psql -U postgres -d elysium_dev
+```
+
 ## 🗄️ Database Schema
 
 ### Source Tables (LakehouseAs400 schema)

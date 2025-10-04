@@ -1,6 +1,8 @@
 {{
   config(
-    materialized='ephemeral'
+    materialized='incremental',
+    unique_key='"MembershipNumber"',
+    on_schema_change='fail'
   )
 }}
 
@@ -31,6 +33,16 @@ SELECT
     c."Member_Status"::VARCHAR(2) AS "MemberStatus",
     CASE WHEN c."Primary_Card" = 'Y' THEN TRUE ELSE FALSE END AS "PrimaryCard",
     c."Dual"::VARCHAR(3) AS "Dual",
-    c."Auto_Charge"::VARCHAR(3) AS "AutoCharge"
+    c."Auto_Charge"::VARCHAR(3) AS "AutoCharge",
+    c."updated_at" AS "updated_at"
     
 FROM {{ source('LakehouseAs400', 'PROD_membership_cards') }} c
+
+{% if is_incremental() %}
+    WHERE c."updated_at" > (
+        SELECT "updated_at" 
+        FROM {{ this }} 
+        ORDER BY "updated_at" DESC 
+        LIMIT 1
+    )
+{% endif %}

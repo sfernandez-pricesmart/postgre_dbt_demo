@@ -1,6 +1,8 @@
 {{
   config(
-    materialized='ephemeral'
+    materialized='incremental',
+    unique_key='"AccountNumberFull"',
+    on_schema_change='fail'
   )
 }}
 
@@ -22,12 +24,21 @@ WITH base AS (
         CASE WHEN MA."Platinum_Account" = 'Y' THEN TRUE ELSE FALSE END AS "PlatinumAccount",
         MA."Number_of_Employees"::NUMERIC(15) AS "NumberOfEmployees",
         {{ convert_empty_string_to_null('MA."Business_License_Number"', 'TEXT') }} AS "BusinessLicenseNumber",
+        MA."updated_at" AS "updated_at",
         ROW_NUMBER() OVER (
             PARTITION BY TRIM(MA."Cost_Center"), TRIM(MA."Account_Number")
             ORDER BY MA."Effective_Date" DESC NULLS LAST
         ) AS rn
     FROM {{ source('LakehouseAs400', 'PROD_membership_accounts') }} AS MA
     WHERE LENGTH(TRIM(MA."Cost_Center")) <= 4
+    {% if is_incremental() %}
+        AND MA."updated_at" > (
+            SELECT "updated_at" 
+            FROM {{ this }} 
+            ORDER BY "updated_at" DESC 
+            LIMIT 1
+        )
+    {% endif %}
 )
 
 SELECT *

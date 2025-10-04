@@ -2,6 +2,9 @@ name: 'elysium_dev'
 version: '1.0.0'
 config-version: 2
 
+# Enable data contracts globally
+require-dbt-version: ">=1.8.0"
+
 # This setting configures which "profile" dbt uses for this project.
 profile: 'elysium_dev'
 

@@ -1,6 +1,8 @@
 {{
   config(
-    materialized='ephemeral'
+    materialized='incremental',
+    unique_key='"OrderNumber"',
+    on_schema_change='fail'
   )
 }}
 
@@ -19,7 +21,8 @@ SELECT
     t."Sales_Order_Number"::NUMERIC(8) AS "SalesOrderNumber",
     t."Invoice_Number"::NUMERIC(8) AS "InvoiceNumber",
     t."Total_Cost"::NUMERIC(15,2) AS "TotalCost",
-    t."Total_Usd_Cost_Net"::NUMERIC(15,2) AS "TotalUsdCostNet"
+    t."Total_Usd_Cost_Net"::NUMERIC(15,2) AS "TotalUsdCostNet",
+    t."updated_at" AS "updated_at"
     
 FROM {{ source('LakehouseAs400', 'PROD_membership_transactions_header') }} t
 WHERE 
@@ -30,3 +33,11 @@ WHERE
      t."Effective_Date" IS NOT NULL AND
      t."Expired_Date" IS NOT NULL AND
      t."Transaction_Date" > '2023-09-01'
+    {% if is_incremental() %}
+        AND t."updated_at" > (
+            SELECT "updated_at" 
+            FROM {{ this }} 
+            ORDER BY "updated_at" DESC 
+            LIMIT 1
+        )
+    {% endif %}
