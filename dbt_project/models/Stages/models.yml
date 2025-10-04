@@ -3,6 +3,8 @@ version: 2
 models:
   - name: StgDimClubs
     description: "Staging model for clubs dimension - cleans and transforms raw club data"
+    config:
+      materialized: ephemeral
     columns:
       - name: ClubNumber
         description: "Club number identifier"

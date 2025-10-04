@@ -3,9 +3,17 @@ version: 2
 models:
   - name: DimClubs
     description: "Dimension table for clubs information"
+    config:
+      materialized: table
+      unique_key: 'DimClubId'
     columns:
+      - name: DimClubId
+        description: "Auto-incremental primary key for clubs dimension"
+        tests:
+          - not_null
+          - unique
       - name: ClubNumber
-        description: "Unique identifier for the club"
+        description: "Business key - unique identifier for the club"
         tests:
           - not_null
           - unique
@@ -25,12 +33,28 @@ models:
           - not_null
           - accepted_values:
               values: ['A', 'I']
+      - name: CreateDate
+        description: "Record creation timestamp"
+        tests:
+          - not_null
+      - name: UpdateDate
+        description: "Record last update timestamp"
+        tests:
+          - not_null
 
   - name: DimDates
     description: "Dimension table for dates with calendar attributes"
+    config:
+      materialized: table
+      unique_key: 'DimDateId'
     columns:
+      - name: DimDateId
+        description: "Auto-incremental primary key for dates dimension"
+        tests:
+          - not_null
+          - unique
       - name: Date
-        description: "The date value"
+        description: "The date value - business key"
         tests:
           - not_null
           - unique
@@ -64,5 +88,13 @@ models:
           - not_null
       - name: IsHoliday
         description: "Boolean indicating if the date is a holiday"
+        tests:
+          - not_null
+      - name: CreateDate
+        description: "Record creation timestamp"
+        tests:
+          - not_null
+      - name: UpdateDate
+        description: "Record last update timestamp"
         tests:
           - not_null

@@ -3,9 +3,17 @@ version: 2
 models:
   - name: DimMembershipAccounts
     description: "Dimension table for membership accounts"
+    config:
+      materialized: table
+      unique_key: 'DimMembershipAccountId'
     columns:
+      - name: DimMembershipAccountId
+        description: "Auto-incremental primary key for membership accounts dimension"
+        tests:
+          - not_null
+          - unique
       - name: AccountNumberFull
-        description: "Full account number (Cost Center + Account Number)"
+        description: "Business key - full account number (Cost Center + Account Number)"
         tests:
           - not_null
           - unique
@@ -47,12 +55,28 @@ models:
         description: "Number of employees for business accounts"
       - name: BusinessLicenseNumber
         description: "Business license number"
+      - name: CreateDate
+        description: "Record creation timestamp"
+        tests:
+          - not_null
+      - name: UpdateDate
+        description: "Record last update timestamp"
+        tests:
+          - not_null
 
   - name: DimMembershipCards
     description: "Dimension table for membership cards"
+    config:
+      materialized: table
+      unique_key: 'DimMembershipCardId'
     columns:
+      - name: DimMembershipCardId
+        description: "Auto-incremental primary key for membership cards dimension"
+        tests:
+          - not_null
+          - unique
       - name: MembershipNumber
-        description: "Full membership number (Cost Center + Account + Card)"
+        description: "Business key - full membership number (Cost Center + Account + Card)"
         tests:
           - not_null
           - unique
@@ -110,14 +134,59 @@ models:
         description: "Dual membership indicator"
       - name: AutoCharge
         description: "Auto charge indicator"
+      - name: CreateDate
+        description: "Record creation timestamp"
+        tests:
+          - not_null
+      - name: UpdateDate
+        description: "Record last update timestamp"
+        tests:
+          - not_null
 
   - name: FactMembershipTransactions
     description: "Fact table for membership transactions"
+    config:
+      materialized: table
+      unique_key: 'FactMembershipTransactionId'
     columns:
-      - name: ClubNumber
-        description: "Club number where transaction occurred"
+      - name: FactMembershipTransactionId
+        description: "Auto-incremental primary key for membership transactions fact"
         tests:
           - not_null
+          - unique
+      - name: DimClubNumberId
+        description: "Foreign key to DimClubs.DimClubId"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('DimClubs')
+              field: DimClubId
+      - name: DimMembershipAccountId
+        description: "Foreign key to DimMembershipAccounts.DimMembershipAccountId"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('DimMembershipAccounts')
+              field: DimMembershipAccountId
+      - name: DimDateTransactionDateId
+        description: "Foreign key to DimDates.DimDateId for transaction date"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('DimDates')
+              field: DimDateId
+      - name: DimDateEffectiveDateId
+        description: "Foreign key to DimDates.DimDateId for effective date"
+        tests:
+          - relationships:
+              to: ref('DimDates')
+              field: DimDateId
+      - name: DimDateExpiredDateId
+        description: "Foreign key to DimDates.DimDateId for expired date"
+        tests:
+          - relationships:
+              to: ref('DimDates')
+              field: DimDateId
       - name: AccountNumber
         description: "Account number for the transaction"
         tests:
@@ -160,5 +229,13 @@ models:
           - not_null
       - name: TotalUsdCostNet
         description: "Total USD cost net of the transaction"
+        tests:
+          - not_null
+      - name: CreateDate
+        description: "Record creation timestamp"
+        tests:
+          - not_null
+      - name: UpdateDate
+        description: "Record last update timestamp"
         tests:
           - not_null

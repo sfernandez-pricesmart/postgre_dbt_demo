@@ -7,13 +7,18 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - ClubNumber
-            - ClubName
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - DimClubId
 
   - name: DimDates
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - Date
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - DimDateId
 
 # Tests for Memberships models
   - name: DimMembershipAccounts
@@ -21,6 +26,9 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - AccountNumberFull
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - DimMembershipAccountId
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - ClubNumber
@@ -33,6 +41,9 @@ models:
             - MembershipNumber
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
+            - DimMembershipCardId
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
             - ClubNumber
             - AccountNumber
             - CardNumber
@@ -41,23 +52,23 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - ClubNumber
-            - AccountNumber
+            - FactMembershipTransactionId
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
             - OrderNumber
-            - TransactionDate
 
 # Relationship tests
 tests:
-  # Test foreign key relationships
+  # Test foreign key relationships using Kimball surrogate keys
   - name: test_fact_transactions_club_fk
     description: "Test that all transactions have valid club references"
     model: FactMembershipTransactions
     test: relationships_where
     config:
       to: ref('DimClubs')
-      from_field: ClubNumber
-      to_field: ClubNumber
-      where: "ClubNumber is not null"
+      from_field: DimClubNumberId
+      to_field: DimClubId
+      where: "DimClubNumberId is not null"
 
   - name: test_fact_transactions_account_fk
     description: "Test that all transactions have valid account references"
@@ -65,39 +76,39 @@ tests:
     test: relationships_where
     config:
       to: ref('DimMembershipAccounts')
-      from_field: AccountNumberFull
-      to_field: AccountNumberFull
-      where: "AccountNumberFull is not null"
+      from_field: DimMembershipAccountId
+      to_field: DimMembershipAccountId
+      where: "DimMembershipAccountId is not null"
 
-  - name: test_cards_account_fk
-    description: "Test that all cards have valid account references"
-    model: DimMembershipCards
+  - name: test_fact_transactions_transaction_date_fk
+    description: "Test that all transactions have valid transaction date references"
+    model: FactMembershipTransactions
     test: relationships_where
     config:
-      to: ref('DimMembershipAccounts')
-      from_field: AccountNumberFull
-      to_field: AccountNumberFull
-      where: "AccountNumberFull is not null"
+      to: ref('DimDates')
+      from_field: DimDateTransactionDateId
+      to_field: DimDateId
+      where: "DimDateTransactionDateId is not null"
 
-  - name: test_cards_club_fk
-    description: "Test that all cards have valid club references"
-    model: DimMembershipCards
+  - name: test_fact_transactions_effective_date_fk
+    description: "Test that all transactions have valid effective date references"
+    model: FactMembershipTransactions
     test: relationships_where
     config:
-      to: ref('DimClubs')
-      from_field: ClubNumber
-      to_field: ClubNumber
-      where: "ClubNumber is not null"
+      to: ref('DimDates')
+      from_field: DimDateEffectiveDateId
+      to_field: DimDateId
+      where: "DimDateEffectiveDateId is not null"
 
-  - name: test_accounts_club_fk
-    description: "Test that all accounts have valid club references"
-    model: DimMembershipAccounts
+  - name: test_fact_transactions_expired_date_fk
+    description: "Test that all transactions have valid expired date references"
+    model: FactMembershipTransactions
     test: relationships_where
     config:
-      to: ref('DimClubs')
-      from_field: ClubNumber
-      to_field: ClubNumber
-      where: "ClubNumber is not null"
+      to: ref('DimDates')
+      from_field: DimDateExpiredDateId
+      to_field: DimDateId
+      where: "DimDateExpiredDateId is not null"
 
 # Data quality tests
   - name: test_transaction_amounts_positive
