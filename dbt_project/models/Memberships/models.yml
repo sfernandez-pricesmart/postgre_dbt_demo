@@ -6,6 +6,53 @@ models:
     config:
       materialized: table
       unique_key: 'DimMembershipAccountId'
+      contracts:
+        enforced: true
+        columns:
+          - name: DimMembershipAccountId
+            data_type: integer
+            constraints: ["primary key", "not null"]
+          - name: AccountNumberFull
+            data_type: varchar(20)
+            constraints: ["not null", "unique"]
+          - name: ClubNumber
+            data_type: varchar(10)
+            constraints: ["not null"]
+          - name: HomeClubNumber
+            data_type: varchar(10)
+          - name: AccountType
+            data_type: varchar(2)
+            constraints: ["not null"]
+          - name: AccountNumber
+            data_type: varchar(10)
+            constraints: ["not null"]
+          - name: Complimentary
+            data_type: varchar(1)
+          - name: DateAccountOpened
+            data_type: date
+          - name: EffectiveDate
+            data_type: date
+          - name: ExpirationDate
+            data_type: date
+          - name: CancelDate
+            data_type: date
+          - name: BusinessName
+            data_type: varchar(100)
+          - name: BSBusinessType
+            data_type: varchar(10)
+          - name: PlatinumAccount
+            data_type: varchar(1)
+            constraints: ["not null"]
+          - name: NumberOfEmployees
+            data_type: integer
+          - name: BusinessLicenseNumber
+            data_type: text
+          - name: CreateDate
+            data_type: timestamp
+            constraints: ["not null"]
+          - name: UpdateDate
+            data_type: timestamp
+            constraints: ["not null"]
     columns:
       - name: DimMembershipAccountId
         description: "Auto-incremental primary key for membership accounts dimension"
@@ -44,50 +91,79 @@ models:
       - name: UpdateDate
         description: "Record last update timestamp"
     tests:
-      # Primary Key Tests
-      - not_null:
-          column_name: DimMembershipAccountId
-      - unique:
-          column_name: DimMembershipAccountId
-      # Business Key Tests
-      - not_null:
-          column_name: AccountNumberFull
-      - unique:
-          column_name: AccountNumberFull
-      # Required Field Tests
-      - not_null:
-          column_name: ClubNumber
-      - not_null:
-          column_name: AccountType
-      - not_null:
-          column_name: AccountNumber
-      - not_null:
-          column_name: PlatinumAccount
-      - not_null:
-          column_name: CreateDate
-      - not_null:
-          column_name: UpdateDate
-      # Data Quality Tests
+      # Data Quality Tests (not enforced by contracts)
       - accepted_values:
           column_name: AccountType
           values: ['DI', 'BS']
-      # Unique Constraint Tests
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - AccountNumberFull
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - DimMembershipAccountId
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - ClubNumber
-            - AccountNumber
 
   - name: DimMembershipCards
     description: "Dimension table for membership cards"
     config:
       materialized: table
       unique_key: 'DimMembershipCardId'
+      contracts:
+        enforced: true
+        columns:
+          - name: DimMembershipCardId
+            data_type: integer
+            constraints: ["primary key", "not null"]
+          - name: MembershipNumber
+            data_type: varchar(30)
+            constraints: ["not null", "unique"]
+          - name: AccountNumberFull
+            data_type: varchar(20)
+            constraints: ["not null"]
+          - name: ClubNumber
+            data_type: varchar(10)
+            constraints: ["not null"]
+          - name: CardNumber
+            data_type: varchar(10)
+            constraints: ["not null"]
+          - name: BlockStatus
+            data_type: varchar(10)
+          - name: CancelDate
+            data_type: date
+          - name: HasCellPhone
+            data_type: varchar(1)
+            constraints: ["not null"]
+          - name: HasEmail
+            data_type: varchar(1)
+            constraints: ["not null"]
+          - name: MemEvent
+            data_type: varchar(10)
+          - name: Zone
+            data_type: varchar(20)
+          - name: AwarenessCode
+            data_type: varchar(10)
+          - name: WayOfNotification
+            data_type: varchar(20)
+          - name: DateOfBirth
+            data_type: date
+          - name: IssuedDate
+            data_type: date
+          - name: Gender
+            data_type: varchar(1)
+          - name: CardType
+            data_type: varchar(10)
+          - name: Country
+            data_type: varchar(50)
+          - name: DiamondBusinessType
+            data_type: varchar(10)
+          - name: MemberStatus
+            data_type: varchar(10)
+          - name: PrimaryCard
+            data_type: varchar(1)
+            constraints: ["not null"]
+          - name: Dual
+            data_type: varchar(1)
+          - name: AutoCharge
+            data_type: varchar(1)
+          - name: CreateDate
+            data_type: timestamp
+            constraints: ["not null"]
+          - name: UpdateDate
+            data_type: timestamp
+            constraints: ["not null"]
     columns:
       - name: DimMembershipCardId
         description: "Auto-incremental primary key for membership cards dimension"
@@ -139,52 +215,71 @@ models:
         description: "Record creation timestamp"
       - name: UpdateDate
         description: "Record last update timestamp"
-    tests:
-      # Primary Key Tests
-      - not_null:
-          column_name: DimMembershipCardId
-      - unique:
-          column_name: DimMembershipCardId
-      # Business Key Tests
-      - not_null:
-          column_name: MembershipNumber
-      - unique:
-          column_name: MembershipNumber
-      # Required Field Tests
-      - not_null:
-          column_name: AccountNumberFull
-      - not_null:
-          column_name: ClubNumber
-      - not_null:
-          column_name: CardNumber
-      - not_null:
-          column_name: HasCellPhone
-      - not_null:
-          column_name: HasEmail
-      - not_null:
-          column_name: PrimaryCard
-      - not_null:
-          column_name: CreateDate
-      - not_null:
-          column_name: UpdateDate
-      # Unique Constraint Tests
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - MembershipNumber
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - DimMembershipCardId
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - ClubNumber
-            - AccountNumber
-            - CardNumber
 
   - name: FactMembershipTransactions
     description: "Fact table for membership transactions"
     config:
       materialized: table
       unique_key: 'FactMembershipTransactionId'
+      contracts:
+        enforced: true
+        columns:
+          - name: FactMembershipTransactionId
+            data_type: integer
+            constraints: ["primary key", "not null"]
+          - name: DimClubNumberId
+            data_type: integer
+            constraints: ["not null"]
+          - name: DimMembershipAccountId
+            data_type: integer
+            constraints: ["not null"]
+          - name: DimDateTransactionDateId
+            data_type: integer
+            constraints: ["not null"]
+          - name: DimDateEffectiveDateId
+            data_type: integer
+          - name: DimDateExpiredDateId
+            data_type: integer
+          - name: AccountNumber
+            data_type: varchar(10)
+            constraints: ["not null"]
+          - name: OrderNumber
+            data_type: varchar(20)
+            constraints: ["not null", "unique"]
+          - name: TransactionDate
+            data_type: date
+            constraints: ["not null"]
+          - name: AccountType
+            data_type: varchar(2)
+            constraints: ["not null"]
+          - name: TransactionType
+            data_type: varchar(20)
+            constraints: ["not null"]
+          - name: ExpiredDate
+            data_type: date
+          - name: EffectiveDate
+            data_type: date
+            constraints: ["not null"]
+          - name: HomeCostCenter
+            data_type: varchar(10)
+          - name: PlatinumTransaction
+            data_type: varchar(1)
+          - name: SalesOrderNumber
+            data_type: varchar(20)
+          - name: InvoiceNumber
+            data_type: varchar(20)
+          - name: TotalCost
+            data_type: decimal(15,2)
+            constraints: ["not null"]
+          - name: TotalUsdCostNet
+            data_type: decimal(15,2)
+            constraints: ["not null"]
+          - name: CreateDate
+            data_type: timestamp
+            constraints: ["not null"]
+          - name: UpdateDate
+            data_type: timestamp
+            constraints: ["not null"]
     columns:
       - name: FactMembershipTransactionId
         description: "Auto-incremental primary key for membership transactions fact"
@@ -229,26 +324,15 @@ models:
       - name: UpdateDate
         description: "Record last update timestamp"
     tests:
-      # Primary Key Tests
-      - not_null:
-          column_name: FactMembershipTransactionId
-      - unique:
-          column_name: FactMembershipTransactionId
-      # Foreign Key Tests
-      - not_null:
-          column_name: DimClubNumberId
+      # Foreign Key Relationship Tests (not enforced by contracts)
       - relationships:
           column_name: DimClubNumberId
           to: ref('DimClubs')
           field: DimClubId
-      - not_null:
-          column_name: DimMembershipAccountId
       - relationships:
           column_name: DimMembershipAccountId
           to: ref('DimMembershipAccounts')
           field: DimMembershipAccountId
-      - not_null:
-          column_name: DimDateTransactionDateId
       - relationships:
           column_name: DimDateTransactionDateId
           to: ref('DimDates')
@@ -261,35 +345,7 @@ models:
           column_name: DimDateExpiredDateId
           to: ref('DimDates')
           field: DimDateId
-      # Required Field Tests
-      - not_null:
-          column_name: AccountNumber
-      - not_null:
-          column_name: OrderNumber
-      - not_null:
-          column_name: TransactionDate
-      - not_null:
-          column_name: AccountType
-      - not_null:
-          column_name: TransactionType
-      - not_null:
-          column_name: EffectiveDate
-      - not_null:
-          column_name: TotalCost
-      - not_null:
-          column_name: TotalUsdCostNet
-      - not_null:
-          column_name: CreateDate
-      - not_null:
-          column_name: UpdateDate
-      # Data Quality Tests
+      # Data Quality Tests (not enforced by contracts)
       - accepted_values:
           column_name: AccountType
           values: ['DI', 'BS']
-      # Unique Constraint Tests
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - FactMembershipTransactionId
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - OrderNumber

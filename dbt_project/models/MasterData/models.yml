@@ -6,6 +6,32 @@ models:
     config:
       materialized: table
       unique_key: 'DimClubId'
+      contracts:
+        enforced: true
+        columns:
+          - name: DimClubId
+            data_type: integer
+            constraints: ["primary key", "not null"]
+          - name: ClubNumber
+            data_type: varchar(10)
+            constraints: ["not null", "unique"]
+          - name: ClubName
+            data_type: varchar(100)
+            constraints: ["not null"]
+          - name: Country
+            data_type: varchar(50)
+            constraints: ["not null"]
+          - name: Zone
+            data_type: varchar(20)
+          - name: Status
+            data_type: varchar(1)
+            constraints: ["not null"]
+          - name: CreateDate
+            data_type: timestamp
+            constraints: ["not null"]
+          - name: UpdateDate
+            data_type: timestamp
+            constraints: ["not null"]
     columns:
       - name: DimClubId
         description: "Auto-incremental primary key for clubs dimension"
@@ -24,44 +50,55 @@ models:
       - name: UpdateDate
         description: "Record last update timestamp"
     tests:
-      # Primary Key Tests
-      - not_null:
-          column_name: DimClubId
-      - unique:
-          column_name: DimClubId
-      # Business Key Tests
-      - not_null:
-          column_name: ClubNumber
-      - unique:
-          column_name: ClubNumber
-      # Required Field Tests
-      - not_null:
-          column_name: ClubName
-      - not_null:
-          column_name: Country
-      - not_null:
-          column_name: Status
-      - not_null:
-          column_name: CreateDate
-      - not_null:
-          column_name: UpdateDate
-      # Data Quality Tests
+      # Data Quality Tests (not enforced by contracts)
       - accepted_values:
           column_name: Status
           values: ['A', 'I']
-      # Unique Constraint Tests
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - ClubNumber
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - DimClubId
 
   - name: DimDates
     description: "Dimension table for dates with calendar attributes"
     config:
       materialized: table
       unique_key: 'DimDateId'
+      contracts:
+        enforced: true
+        columns:
+          - name: DimDateId
+            data_type: integer
+            constraints: ["primary key", "not null"]
+          - name: Date
+            data_type: date
+            constraints: ["not null", "unique"]
+          - name: Year
+            data_type: integer
+            constraints: ["not null"]
+          - name: Month
+            data_type: integer
+            constraints: ["not null"]
+          - name: Day
+            data_type: integer
+            constraints: ["not null"]
+          - name: Quarter
+            data_type: integer
+            constraints: ["not null"]
+          - name: Week
+            data_type: integer
+            constraints: ["not null"]
+          - name: DayOfWeek
+            data_type: integer
+            constraints: ["not null"]
+          - name: IsWeekend
+            data_type: boolean
+            constraints: ["not null"]
+          - name: IsHoliday
+            data_type: boolean
+            constraints: ["not null"]
+          - name: CreateDate
+            data_type: timestamp
+            constraints: ["not null"]
+          - name: UpdateDate
+            data_type: timestamp
+            constraints: ["not null"]
     columns:
       - name: DimDateId
         description: "Auto-incremental primary key for dates dimension"
@@ -87,42 +124,3 @@ models:
         description: "Record creation timestamp"
       - name: UpdateDate
         description: "Record last update timestamp"
-    tests:
-      # Primary Key Tests
-      - not_null:
-          column_name: DimDateId
-      - unique:
-          column_name: DimDateId
-      # Business Key Tests
-      - not_null:
-          column_name: Date
-      - unique:
-          column_name: Date
-      # Required Field Tests
-      - not_null:
-          column_name: Year
-      - not_null:
-          column_name: Month
-      - not_null:
-          column_name: Day
-      - not_null:
-          column_name: Quarter
-      - not_null:
-          column_name: Week
-      - not_null:
-          column_name: DayOfWeek
-      - not_null:
-          column_name: IsWeekend
-      - not_null:
-          column_name: IsHoliday
-      - not_null:
-          column_name: CreateDate
-      - not_null:
-          column_name: UpdateDate
-      # Unique Constraint Tests
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - Date
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - DimDateId
