@@ -21,7 +21,7 @@ WITH base AS (
         {{ convert_empty_string_to_null('MA."BS_Business_Type"', 'VARCHAR(3)') }} AS "BSBusinessType",
         CASE WHEN MA."Platinum_Account" = 'Y' THEN TRUE ELSE FALSE END AS "PlatinumAccount",
         MA."Number_of_Employees"::NUMERIC(15) AS "NumberOfEmployees",
-        {{ convert_empty_string_to_null('MA."Business_License_Number"', 'VARCHAR(16777216)') }} AS "BusinessLicenseNumber",
+        {{ convert_empty_string_to_null('MA."Business_License_Number"', 'TEXT') }} AS "BusinessLicenseNumber",
         ROW_NUMBER() OVER (
             PARTITION BY TRIM(MA."Cost_Center"), TRIM(MA."Account_Number")
             ORDER BY MA."Effective_Date" DESC NULLS LAST

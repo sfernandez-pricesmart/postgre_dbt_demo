@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS "LakehouseAs400"."PROD_membership_accounts" (
     "BS_Business_Type" VARCHAR(3),
     "Platinum_Account" VARCHAR(1),
     "Number_of_Employees" NUMERIC(15,0),
-    "Business_License_Number" VARCHAR(16777216)
+    "Business_License_Number" TEXT
 );
 
 -- Membership Transactions Source Table
