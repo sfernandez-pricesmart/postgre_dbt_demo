@@ -5,6 +5,7 @@
 }}
 
 SELECT 
+    ROW_NUMBER() OVER (ORDER BY "AccountNumberFull") AS "DimMembershipAccountId",
     "AccountNumberFull",
     "ClubNumber",
     "HomeClubNumber",
@@ -19,6 +20,8 @@ SELECT
     "BSBusinessType",
     "PlatinumAccount",
     "NumberOfEmployees",
-    "BusinessLicenseNumber"
+    "BusinessLicenseNumber",
+    CURRENT_TIMESTAMP AS "CreateDate",
+    CURRENT_TIMESTAMP AS "UpdateDate"
     
 FROM {{ ref('StgDimMembershipAccounts') }}

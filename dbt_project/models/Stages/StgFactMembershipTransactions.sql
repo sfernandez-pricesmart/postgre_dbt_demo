@@ -6,8 +6,8 @@
 
 SELECT 
     -- Data type casting and transformations
-    t."Cost_Center"::INTEGER AS "ClubNumber",
-    t."Account_Number"::INTEGER AS "AccountNumber",
+    t."Cost_Center"::VARCHAR(4) AS "ClubNumber",
+    t."Account_Number"::NUMERIC(6,0) AS "AccountNumber",
     t."Order_Number"::NUMERIC(8) AS "OrderNumber",
     t."Transaction_Date"::DATE AS "TransactionDate",
     t."Account_Type"::VARCHAR(2) AS "AccountType",

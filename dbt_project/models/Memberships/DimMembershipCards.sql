@@ -5,6 +5,7 @@
 }}
 
 SELECT 
+    ROW_NUMBER() OVER (ORDER BY "MembershipNumber") AS "DimMembershipCardId",
     "MembershipNumber",
     "AccountNumberFull",
     "ClubNumber",
@@ -26,6 +27,8 @@ SELECT
     "MemberStatus",
     "PrimaryCard",
     "Dual",
-    "AutoCharge"
+    "AutoCharge",
+    CURRENT_TIMESTAMP AS "CreateDate",
+    CURRENT_TIMESTAMP AS "UpdateDate"
     
 FROM {{ ref('StgDimMembershipCards') }}

@@ -5,6 +5,7 @@
 }}
 
 SELECT 
+    ROW_NUMBER() OVER (ORDER BY "Date") AS "DimDateId",
     "Date",
     "Year",
     "Month",
@@ -13,6 +14,8 @@ SELECT
     "Week",
     "DayOfWeek",
     "IsWeekend",
-    "IsHoliday"
+    "IsHoliday",
+    CURRENT_TIMESTAMP AS "CreateDate",
+    CURRENT_TIMESTAMP AS "UpdateDate"
     
 FROM {{ ref('StgDimDates') }}
