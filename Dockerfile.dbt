@@ -1,0 +1,28 @@
+FROM python:3.11-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install dbt
+RUN pip install dbt-postgres
+
+# Create dbt project directory
+RUN mkdir -p /app/dbt_project
+
+# Set environment variables
+ENV PYTHONPATH=/app
+ENV DBT_PROFILES_DIR=/app/dbt_project
+
+# Keep container running
+CMD ["tail", "-f", "/dev/null"]
