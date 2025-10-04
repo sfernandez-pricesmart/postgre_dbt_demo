@@ -7,19 +7,19 @@
 }}
 
 SELECT 
-    -- Data type casting and transformations
+    -- Data type casting to match existing schema exactly
     t."Cost_Center"::VARCHAR(4) AS "ClubNumber",
     t."Account_Number"::NUMERIC(6,0) AS "AccountNumber",
-    t."Order_Number"::NUMERIC(8) AS "OrderNumber",
+    t."Order_Number"::NUMERIC(8,0) AS "OrderNumber",
     t."Transaction_Date"::DATE AS "TransactionDate",
     t."Account_Type"::VARCHAR(2) AS "AccountType",
     t."Transaction_Type"::VARCHAR(3) AS "TransactionType",
     t."Expired_Date"::DATE AS "ExpiredDate",
     t."Effective_Date"::DATE AS "EffectiveDate",
     t."Home_Cost_Center"::VARCHAR(4) AS "HomeCostCenter",
-    {{ convert_empty_string_to_null('t."Platinum_Transaction"', 'VARCHAR(3)') }} AS "PlatinumTransaction",
-    t."Sales_Order_Number"::NUMERIC(8) AS "SalesOrderNumber",
-    t."Invoice_Number"::NUMERIC(8) AS "InvoiceNumber",
+    {{ convert_empty_string_to_null('t."Platinum_Transaction"', 'VARCHAR') }} AS "PlatinumTransaction",
+    t."Sales_Order_Number"::NUMERIC(8,0) AS "SalesOrderNumber",
+    t."Invoice_Number"::NUMERIC(8,0) AS "InvoiceNumber",
     t."Total_Cost"::NUMERIC(15,2) AS "TotalCost",
     t."Total_Usd_Cost_Net"::NUMERIC(15,2) AS "TotalUsdCostNet",
     t."updated_at" AS "updated_at"

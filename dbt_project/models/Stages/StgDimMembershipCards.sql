@@ -7,7 +7,7 @@
 }}
 
 SELECT 
-    -- Data type casting and transformations
+    -- Data type casting to match existing schema exactly
     CONCAT(TRIM(c."Cost_Center"),
            RIGHT(CONCAT('000000', TRIM(c."Account_Number")),6),
            RIGHT(CONCAT('0000', TRIM(c."Card_Number")),4))::INTEGER AS "MembershipNumber",
@@ -15,7 +15,7 @@ SELECT
            RIGHT(CONCAT('000000', 
            TRIM(c."Account_Number")), 6))::INTEGER AS "AccountNumberFull",
     c."Cost_Center"::VARCHAR(4) AS "ClubNumber",
-    c."Card_Number"::NUMERIC(4) AS "CardNumber",
+    c."Card_Number"::NUMERIC(4,0) AS "CardNumber",
     c."Block_Status"::VARCHAR(2) AS "BlockStatus",
     c."Cancel_Date"::DATE AS "CancelDate",
     CASE WHEN c."Cell_Phone_YN" = 'Y' THEN TRUE ELSE FALSE END AS "HasCellPhone",
