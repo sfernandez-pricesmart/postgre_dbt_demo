@@ -9,30 +9,16 @@ models:
     columns:
       - name: DimMembershipAccountId
         description: "Auto-incremental primary key for membership accounts dimension"
-        tests:
-          - not_null
-          - unique
       - name: AccountNumberFull
         description: "Business key - full account number (Cost Center + Account Number)"
-        tests:
-          - not_null
-          - unique
       - name: ClubNumber
         description: "Club number where the account belongs"
-        tests:
-          - not_null
       - name: HomeClubNumber
         description: "Home club number for the account"
       - name: AccountType
         description: "Type of account (DI=Individual, BS=Business)"
-        tests:
-          - not_null
-          - accepted_values:
-              values: ['DI', 'BS']
       - name: AccountNumber
         description: "Account number within the club"
-        tests:
-          - not_null
       - name: Complimentary
         description: "Whether the account is complimentary"
       - name: DateAccountOpened
@@ -49,21 +35,43 @@ models:
         description: "Business type for business accounts"
       - name: PlatinumAccount
         description: "Whether the account is platinum"
-        tests:
-          - not_null
       - name: NumberOfEmployees
         description: "Number of employees for business accounts"
       - name: BusinessLicenseNumber
         description: "Business license number"
       - name: CreateDate
         description: "Record creation timestamp"
-        tests:
-          - not_null
       - name: UpdateDate
         description: "Record last update timestamp"
-        tests:
-          - not_null
     tests:
+      # Primary Key Tests
+      - not_null:
+          column_name: DimMembershipAccountId
+      - unique:
+          column_name: DimMembershipAccountId
+      # Business Key Tests
+      - not_null:
+          column_name: AccountNumberFull
+      - unique:
+          column_name: AccountNumberFull
+      # Required Field Tests
+      - not_null:
+          column_name: ClubNumber
+      - not_null:
+          column_name: AccountType
+      - not_null:
+          column_name: AccountNumber
+      - not_null:
+          column_name: PlatinumAccount
+      - not_null:
+          column_name: CreateDate
+      - not_null:
+          column_name: UpdateDate
+      # Data Quality Tests
+      - accepted_values:
+          column_name: AccountType
+          values: ['DI', 'BS']
+      # Unique Constraint Tests
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - AccountNumberFull
@@ -83,38 +91,22 @@ models:
     columns:
       - name: DimMembershipCardId
         description: "Auto-incremental primary key for membership cards dimension"
-        tests:
-          - not_null
-          - unique
       - name: MembershipNumber
         description: "Business key - full membership number (Cost Center + Account + Card)"
-        tests:
-          - not_null
-          - unique
       - name: AccountNumberFull
         description: "Full account number this card belongs to"
-        tests:
-          - not_null
       - name: ClubNumber
         description: "Club number where the card was issued"
-        tests:
-          - not_null
       - name: CardNumber
         description: "Card number within the account"
-        tests:
-          - not_null
       - name: BlockStatus
         description: "Status of the card (blocked/active)"
       - name: CancelDate
         description: "Date when the card was cancelled"
       - name: HasCellPhone
         description: "Whether the member has provided cell phone"
-        tests:
-          - not_null
       - name: HasEmail
         description: "Whether the member has provided email"
-        tests:
-          - not_null
       - name: MemEvent
         description: "Membership event code"
       - name: Zone
@@ -139,21 +131,43 @@ models:
         description: "Status of the member"
       - name: PrimaryCard
         description: "Whether this is the primary card"
-        tests:
-          - not_null
       - name: Dual
         description: "Dual membership indicator"
       - name: AutoCharge
         description: "Auto charge indicator"
       - name: CreateDate
         description: "Record creation timestamp"
-        tests:
-          - not_null
       - name: UpdateDate
         description: "Record last update timestamp"
-        tests:
-          - not_null
     tests:
+      # Primary Key Tests
+      - not_null:
+          column_name: DimMembershipCardId
+      - unique:
+          column_name: DimMembershipCardId
+      # Business Key Tests
+      - not_null:
+          column_name: MembershipNumber
+      - unique:
+          column_name: MembershipNumber
+      # Required Field Tests
+      - not_null:
+          column_name: AccountNumberFull
+      - not_null:
+          column_name: ClubNumber
+      - not_null:
+          column_name: CardNumber
+      - not_null:
+          column_name: HasCellPhone
+      - not_null:
+          column_name: HasEmail
+      - not_null:
+          column_name: PrimaryCard
+      - not_null:
+          column_name: CreateDate
+      - not_null:
+          column_name: UpdateDate
+      # Unique Constraint Tests
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - MembershipNumber
@@ -174,70 +188,30 @@ models:
     columns:
       - name: FactMembershipTransactionId
         description: "Auto-incremental primary key for membership transactions fact"
-        tests:
-          - not_null
-          - unique
       - name: DimClubNumberId
         description: "Foreign key to DimClubs.DimClubId"
-        tests:
-          - not_null
-          - relationships:
-              to: ref('DimClubs')
-              field: DimClubId
       - name: DimMembershipAccountId
         description: "Foreign key to DimMembershipAccounts.DimMembershipAccountId"
-        tests:
-          - not_null
-          - relationships:
-              to: ref('DimMembershipAccounts')
-              field: DimMembershipAccountId
       - name: DimDateTransactionDateId
         description: "Foreign key to DimDates.DimDateId for transaction date"
-        tests:
-          - not_null
-          - relationships:
-              to: ref('DimDates')
-              field: DimDateId
       - name: DimDateEffectiveDateId
         description: "Foreign key to DimDates.DimDateId for effective date"
-        tests:
-          - relationships:
-              to: ref('DimDates')
-              field: DimDateId
       - name: DimDateExpiredDateId
         description: "Foreign key to DimDates.DimDateId for expired date"
-        tests:
-          - relationships:
-              to: ref('DimDates')
-              field: DimDateId
       - name: AccountNumber
         description: "Account number for the transaction"
-        tests:
-          - not_null
       - name: OrderNumber
         description: "Order number for the transaction"
-        tests:
-          - not_null
       - name: TransactionDate
         description: "Date of the transaction"
-        tests:
-          - not_null
       - name: AccountType
         description: "Type of account (DI/BS)"
-        tests:
-          - not_null
-          - accepted_values:
-              values: ['DI', 'BS']
       - name: TransactionType
         description: "Type of transaction"
-        tests:
-          - not_null
       - name: ExpiredDate
         description: "Expiration date of the transaction"
       - name: EffectiveDate
         description: "Effective date of the transaction"
-        tests:
-          - not_null
       - name: HomeCostCenter
         description: "Home cost center for the transaction"
       - name: PlatinumTransaction
@@ -248,22 +222,71 @@ models:
         description: "Invoice number"
       - name: TotalCost
         description: "Total cost of the transaction"
-        tests:
-          - not_null
       - name: TotalUsdCostNet
         description: "Total USD cost net of the transaction"
-        tests:
-          - not_null
       - name: CreateDate
         description: "Record creation timestamp"
-        tests:
-          - not_null
       - name: UpdateDate
         description: "Record last update timestamp"
-        tests:
-          - not_null
-
     tests:
+      # Primary Key Tests
+      - not_null:
+          column_name: FactMembershipTransactionId
+      - unique:
+          column_name: FactMembershipTransactionId
+      # Foreign Key Tests
+      - not_null:
+          column_name: DimClubNumberId
+      - relationships:
+          column_name: DimClubNumberId
+          to: ref('DimClubs')
+          field: DimClubId
+      - not_null:
+          column_name: DimMembershipAccountId
+      - relationships:
+          column_name: DimMembershipAccountId
+          to: ref('DimMembershipAccounts')
+          field: DimMembershipAccountId
+      - not_null:
+          column_name: DimDateTransactionDateId
+      - relationships:
+          column_name: DimDateTransactionDateId
+          to: ref('DimDates')
+          field: DimDateId
+      - relationships:
+          column_name: DimDateEffectiveDateId
+          to: ref('DimDates')
+          field: DimDateId
+      - relationships:
+          column_name: DimDateExpiredDateId
+          to: ref('DimDates')
+          field: DimDateId
+      # Required Field Tests
+      - not_null:
+          column_name: AccountNumber
+      - not_null:
+          column_name: OrderNumber
+      - not_null:
+          column_name: TransactionDate
+      - not_null:
+          column_name: AccountType
+      - not_null:
+          column_name: TransactionType
+      - not_null:
+          column_name: EffectiveDate
+      - not_null:
+          column_name: TotalCost
+      - not_null:
+          column_name: TotalUsdCostNet
+      - not_null:
+          column_name: CreateDate
+      - not_null:
+          column_name: UpdateDate
+      # Data Quality Tests
+      - accepted_values:
+          column_name: AccountType
+          values: ['DI', 'BS']
+      # Unique Constraint Tests
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - FactMembershipTransactionId

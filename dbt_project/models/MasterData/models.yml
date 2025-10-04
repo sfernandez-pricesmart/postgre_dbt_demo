@@ -9,39 +9,47 @@ models:
     columns:
       - name: DimClubId
         description: "Auto-incremental primary key for clubs dimension"
-        tests:
-          - not_null
-          - unique
       - name: ClubNumber
         description: "Business key - unique identifier for the club"
-        tests:
-          - not_null
-          - unique
       - name: ClubName
         description: "Name of the club"
-        tests:
-          - not_null
       - name: Country
         description: "Country where the club is located"
-        tests:
-          - not_null
       - name: Zone
         description: "Geographic zone of the club"
       - name: Status
         description: "Status of the club (Active/Inactive)"
-        tests:
-          - not_null
-          - accepted_values:
-              values: ['A', 'I']
       - name: CreateDate
         description: "Record creation timestamp"
-        tests:
-          - not_null
       - name: UpdateDate
         description: "Record last update timestamp"
-        tests:
-          - not_null
     tests:
+      # Primary Key Tests
+      - not_null:
+          column_name: DimClubId
+      - unique:
+          column_name: DimClubId
+      # Business Key Tests
+      - not_null:
+          column_name: ClubNumber
+      - unique:
+          column_name: ClubNumber
+      # Required Field Tests
+      - not_null:
+          column_name: ClubName
+      - not_null:
+          column_name: Country
+      - not_null:
+          column_name: Status
+      - not_null:
+          column_name: CreateDate
+      - not_null:
+          column_name: UpdateDate
+      # Data Quality Tests
+      - accepted_values:
+          column_name: Status
+          values: ['A', 'I']
+      # Unique Constraint Tests
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - ClubNumber
@@ -57,56 +65,61 @@ models:
     columns:
       - name: DimDateId
         description: "Auto-incremental primary key for dates dimension"
-        tests:
-          - not_null
-          - unique
       - name: Date
         description: "The date value - business key"
-        tests:
-          - not_null
-          - unique
       - name: Year
         description: "Year component of the date"
-        tests:
-          - not_null
       - name: Month
         description: "Month component of the date (1-12)"
-        tests:
-          - not_null
       - name: Day
         description: "Day component of the date (1-31)"
-        tests:
-          - not_null
       - name: Quarter
         description: "Quarter of the year (1-4)"
-        tests:
-          - not_null
       - name: Week
         description: "Week number of the year"
-        tests:
-          - not_null
       - name: DayOfWeek
         description: "Day of the week (1=Monday, 7=Sunday)"
-        tests:
-          - not_null
       - name: IsWeekend
         description: "Boolean indicating if the date is a weekend"
-        tests:
-          - not_null
       - name: IsHoliday
         description: "Boolean indicating if the date is a holiday"
-        tests:
-          - not_null
       - name: CreateDate
         description: "Record creation timestamp"
-        tests:
-          - not_null
       - name: UpdateDate
         description: "Record last update timestamp"
-        tests:
-          - not_null
-
     tests:
+      # Primary Key Tests
+      - not_null:
+          column_name: DimDateId
+      - unique:
+          column_name: DimDateId
+      # Business Key Tests
+      - not_null:
+          column_name: Date
+      - unique:
+          column_name: Date
+      # Required Field Tests
+      - not_null:
+          column_name: Year
+      - not_null:
+          column_name: Month
+      - not_null:
+          column_name: Day
+      - not_null:
+          column_name: Quarter
+      - not_null:
+          column_name: Week
+      - not_null:
+          column_name: DayOfWeek
+      - not_null:
+          column_name: IsWeekend
+      - not_null:
+          column_name: IsHoliday
+      - not_null:
+          column_name: CreateDate
+      - not_null:
+          column_name: UpdateDate
+      # Unique Constraint Tests
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - Date
